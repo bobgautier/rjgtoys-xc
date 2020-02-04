@@ -1,0 +1,10 @@
+rjgtoys.xc.egg-info
+*.pyc
+.cache
+.coverage
+htmlcov
+junit.xml
+.eggs
+build
+.mypy_cache
+__pycache__
