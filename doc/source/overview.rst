@@ -1,21 +1,23 @@
 Overview
 ========
 
-XC encourages a structured, disciplined approach to use of exceptions: where they are
-raised, it reduces the overhead of declaring exceptions that are specific to a cause,
+XC encourages a structured, disciplined approach to use of exceptions: it reduces the
+overhead of declaring exceptions that are specific to a cause,
 and that contain information of use to the handler.   That in turn makes it easier
 to write concise handlers.
 
-Detailed documentation for XC exceptions can be generated automatically by Sphinx.
+A Sphinx extension makes it easy to produce good documentation from properly declared exceptions.
 
 XC exceptions can be serialised into standard-compliant, language-independent JSON,
-which makes them easy
-to use in web APIs, even when the consumer is not written in Python.
+which makes them easy to use in web APIs, even when the consumer is not written in Python.
 
 What's the problem this package solves?
 ---------------------------------------
 
-It can be tedious to declare separate exception classes for every kind
+A good exception will be specific to its cause, and will carry information
+back to the handler that allows that cause to be identified, if necessary.
+
+But it can be tedious to declare separate exception classes for every kind
 of situation that can occur, and that can lead to 'overloading' of exception
 classes - using a single class for multiple kinds of error.
 
@@ -34,10 +36,10 @@ You may have seen (or even written) code that raises exceptions like this::
 When a 'general purpose' exception class is used, handling the exception becomes
 difficult.
 
-Often the only way to distinguish between different causes of the exception is
-to analyse the content of the exception.
+When the class doesn't identify the cause, the only way to distinguish between
+different causes is to analyse the content of the exception.
 
-You may have seen code that handles exceptions like this::
+Sometimes there is no alternative but to write code like this::
 
     try:
         (h, p) = split_host_port(data)
@@ -56,7 +58,7 @@ about the cause in an easily accessed way.
 In the above example, suppose you wanted to know the spec that had caused the exception.   In this simple
 example it's easy enough to get at (in `data`) but that may not be so straightforward in real code.
 
-The exception should (IMHO) provide information about its own cause, but in this case the only way to do that
+The exception should provide information about its own cause, but in this case the only way to do that
 is to examine the string representation of the exception::
 
     try:
@@ -87,24 +89,24 @@ Structured examples
 
 The above examples can be rewritten like this.
 
-There is no avoiding having to declare the specific exception, but the declaration is
+There is no avoiding having to declare the exception, but the declaration is
 more terse than it might have been if based directly on :class:`Exception`.   In particular
 you don't have to write any constructors or any other methods for your new exception.
 
 ::
 
-    from rjgtoys.xc import Error
+    from rjgtoys.xc import Error, Title
 
     class InvalidHostPort(XC.Error):
         """Raised when an host:port specification is wrong."""
 
-        spec: str
+        spec: str = Title("The invalid host:port string")
 
         detail = "Invalid host port specification: {spec}"
 
 
-The raiser is a little more terse, and the code simpler, because you don't habe to bother
-with constructing the 'message' string::
+The raiser is a little more terse because it doesn't have to
+construct the 'message' string::
 
     def split_host_port(spec):
         try:
@@ -113,6 +115,7 @@ with constructing the 'message' string::
             return (host, port)
         except ValueError:
             raise InvalidHostPort(spec=spec)
+
 
 The handler is now very specific::
 
@@ -123,7 +126,7 @@ The handler is now very specific::
 
 
 In the handler, you now have a specific exception class to catch, and furthermore, it delivers the detail that
-you need to handle it properly.
+you need to handle it properly, as an attribute of the exception.
 
 
 Structured exceptions and APIs

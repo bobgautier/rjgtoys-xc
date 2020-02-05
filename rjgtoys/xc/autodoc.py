@@ -17,16 +17,6 @@ from rjgtoys.xc._xc import XC, _XCMeta
 logger = logging.getLogger(__name__)
 
 
-class StdExceptionDocumenter(ExceptionDocumenter):
-    """A replacement for the standard ExceptionDocumenter
-    that exists just to create a new directive that
-    can be used in the XC docs themselves.
-    """
-
-    objtype="xc_as_exception"
-    directivetype="exception"
-
-
 class XCDocumenter(ExceptionDocumenter):
     """
     Specialized ExceptionDocumenter subclass for XC exceptions.
@@ -171,9 +161,25 @@ class XCDocumenter(ExceptionDocumenter):
             print("RESULT: %s" % (line))
 
 
+class StdExceptionDocumenter(ExceptionDocumenter):
+    """A replacement for the standard ExceptionDocumenter
+    that exists just to create a new directive that
+    can be used in the XC docs themselves.
+
+    It creates an 'autoxc_as_exception::' directive
+    that does what the standard `autoexception::` does.
+
+    """
+
+    objtype="xc_as_exception"
+    directivetype="exception"
+
+
 def setup(app):
+    # Ensure prerequisites are loaded first
     app.setup_extension('sphinx.ext.autodoc')
     app.setup_extension('sphinx_autodoc_typehints')
+
     app.add_autodocumenter(XCDocumenter, override=True)
     app.add_autodocumenter(StdExceptionDocumenter)
 
