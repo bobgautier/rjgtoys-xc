@@ -1,13 +1,25 @@
 Documenting XC exceptions
 =========================
 
-XC contains a Sphinx extension that will generate documentation for
-your exceptions.
+XC contains a Sphinx_ extension called ``rjgtoys.xc.autodoc`` that will generate
+documentation for your XC exceptions.
 
-.. _Sphnx:
+.. _Sphinx: https://www.sphinx-doc.org/en/master/
 
-Enable the ``autoxc`` directive
--------------------------------
+This extension builds on the ``sphinx.ext.autodoc`` extension, and extends the ``autoexception`` directive so that it generates more detailed documentation for XC exceptions than for others.
+
+Installation
+------------
+
+``rjgtoys.xc.autodoc`` depends on the ``sphinx_autodoc_typehints`` extension, which must be installed in order
+for for it to work::
+
+    pip install sphinx-autodoc-typehints
+
+.. _sphinx_autodoc_typehints: https://github.com/agronholm/sphinx-autodoc-typehints
+
+Enable the ``rjgtoys.xc.autodoc`` extension
+-------------------------------------------
 
 Add ``rjgtoys.xc.autodoc`` to the extensions listed in your `conf.py` Sphinx
 configuration.  For example, add the following::
@@ -16,26 +28,37 @@ configuration.  For example, add the following::
         'rjgtoys.xc.autodoc'
     ])
 
-This adds a new directive, ``autoxc``, that will generate documentation for
-XC exceptions.
+There is no need to list either ``sphinx.ext.autodoc`` or ``sphinx_autodoc_typehints``; both are required, and will be
+enabled automatically by ``rjgtoys.xc.autodoc``.
 
 Example markup and output
 -------------------------
 
-The example web API server and client provided with the XC source code use
-an exception called :class:`~examples.apierrors.OpError` to signal a problem with an operation:
+The example module ``examples/insuffspace.py`` (included in the XC source code)
+declares the following exception::
 
-.. literalinclude:: ../../examples/apierrors.py
+    class InsufficientSpace(Error):
+        """Raised when a filesystem has insufficient space."""
 
-To document that, include an ``autoxc`` directive in your Sphinx markup::
+        detail = "Filesystem {path} has only {avail} bytes free, need {need}"
 
-  .. autoxc:: examples.apierrors.OpError
+        path: str = Title("The filesystem mount point")
+        avail: int = Field(..., title="Number of bytes free on the filesystem")
+        need:  int = Title("Number of bytes needed")
+
+To document that, include an ``autoexception`` directive in your Sphinx markup::
+
+  .. autoexception:: examples.insuffspace.InsufficientSpace
 
 The result is as follows:
 
-.. autoxc:: examples.apierrors.OpError
+.. autoexception:: examples.insuffspace.InsufficientSpace
 
 Compare the plain ``autoexception`` output:
 
-.. autoexception:: examples.apierrors.OpError
+.. The following directive is defined by rjgtoys.xc.autodoc
+   purely for this purpose: it gives access to the plain
+   autoexception behaviour, to allow a demonstration of
+   the default treatment of an XC exception.
 
+.. autoxc_as_exception:: examples.insuffspace.InsufficientSpace

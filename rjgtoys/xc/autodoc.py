@@ -5,17 +5,33 @@ from typing import Any, get_type_hints
 import json
 
 
-from sphinx.ext.autodoc import ClassDocumenter
+from sphinx.ext.autodoc import ExceptionDocumenter
+from sphinx.util import logging
+from sphinx.locale import _, __
 
 from sphinx_autodoc_typehints import format_annotation
 
-from rjgtoys.xc._xc import XC
+from rjgtoys.xc._xc import XC, _XCMeta
 
-class XCDocumenter(ClassDocumenter):
+
+logger = logging.getLogger(__name__)
+
+
+class StdExceptionDocumenter(ExceptionDocumenter):
+    """A replacement for the standard ExceptionDocumenter
+    that exists just to create a new directive that
+    can be used in the XC docs themselves.
     """
-    Specialized ClassDocumenter subclass for XC exceptions.
+
+    objtype="xc_as_exception"
+    directivetype="exception"
+
+
+class XCDocumenter(ExceptionDocumenter):
     """
-    objtype = 'xc'
+    Specialized ExceptionDocumenter subclass for XC exceptions.
+    """
+    objtype = 'exception'
     directivetype = 'exception'
     member_order = 10
 
@@ -59,6 +75,20 @@ class XCDocumenter(ClassDocumenter):
 
         # now, import the module and get object to document
         if not self.import_object():
+            return
+
+        # Is this the right kind?  If not, delegate to the superclass?
+        # TODO
+        #   return super().generate(...)
+        #
+
+        if not isinstance(self.object, _XCMeta):
+            super().generate(
+                more_content=more_content,
+                real_modname=real_modname,
+                check_module=check_module,
+                all_members=all_members
+            )
             return
 
         schema = self.object._model.schema()
@@ -133,7 +163,7 @@ class XCDocumenter(ClassDocumenter):
         finally:
             self.indent = indent
 
-        #return
+        return
 
         # DEBUG: dump our output
 
@@ -142,7 +172,10 @@ class XCDocumenter(ClassDocumenter):
 
 
 def setup(app):
-    app.add_autodocumenter(XCDocumenter)
+    app.setup_extension('sphinx.ext.autodoc')
+    app.setup_extension('sphinx_autodoc_typehints')
+    app.add_autodocumenter(XCDocumenter, override=True)
+    app.add_autodocumenter(StdExceptionDocumenter)
 
     return {
         'version': '0.1',
