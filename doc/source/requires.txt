@@ -1,0 +1,2 @@
+pydantic
+sphinx_autodoc_typehints
