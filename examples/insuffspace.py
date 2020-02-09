@@ -12,7 +12,9 @@ class InsufficientSpace(Error):
     need:  int = Title("Number of bytes needed")
 
 def copy_file_to_dest(src, dst):
-    raise InsufficientSpace(path=dst, avail=100, need=300)
+    e =  InsufficientSpace(path=dst, avail=100, need=300)
+    print(e.to_dict())
+    raise e
 
 try:
     copy_file_to_dest('a', 'b')

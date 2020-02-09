@@ -11,7 +11,7 @@ from sphinx.locale import _, __
 
 from sphinx_autodoc_typehints import format_annotation
 
-from rjgtoys.xc._xc import XC, _XCMeta
+from rjgtoys.xc._xc import XC, _XCType
 
 
 logger = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ class XCDocumenter(ExceptionDocumenter):
         #   return super().generate(...)
         #
 
-        if not isinstance(self.object, _XCMeta):
+        if not isinstance(self.object, _XCType):
             super().generate(
                 more_content=more_content,
                 real_modname=real_modname,

@@ -12,7 +12,7 @@ over an HTTP REST API.
 
 .. autoexception:: _XCBase
 
-.. autoclass:: _XCMeta
+.. autoclass:: _XCType
 
 
 """
@@ -73,7 +73,7 @@ class _XCBase(Exception):
         return (self.__class__ is other.__class__) and (self._content == other._content)
 
 
-class _XCMeta(type):
+class _XCType(type):
     """Metaclass for exceptions."""
 
     def __new__(cls, name, bases, attrs):
@@ -155,7 +155,7 @@ class _XCMeta(type):
         return type.__new__(cls, name, bases, exc_attrs)
 
 
-class XC(_XCBase, metaclass=_XCMeta):
+class XC(_XCBase, metaclass=_XCType):
     """The base class for 'structured' exceptions.
 
     Provides a bit of structure on top of the language-provided
@@ -269,23 +269,3 @@ def all_subclasses(cls):
     )
 
 
-
-
-class Bug(XC):
-    """
-    This is the base class for exceptions that should never occur at runtime.
-
-    They indicate a programming error that is not recoverable.
-    """
-
-    pass
-
-
-class Error(XC):
-    """
-    This is the base class for exceptions that may be recoverable.
-
-    Packages should create subclasses of this.
-    """
-
-    pass
