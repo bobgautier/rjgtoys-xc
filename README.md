@@ -1,4 +1,4 @@
-# XC: Structure exceptions for Python
+# XC: Structured exceptions for Python
 
 XC encourages a structured, disciplined approach to use of exceptions: it reduces the
 overhead of declaring exceptions that are specific to a cause,
