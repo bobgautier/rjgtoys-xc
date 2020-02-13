@@ -116,7 +116,9 @@ class XCDocumenter(ExceptionDocumenter):
 
             source = self.get_sourcename()
 
+            has_params = False
             for (pname, ptype) in schema['properties'].items():
+                has_params = True
                 hint = hints.get(pname,'')
                 if hint:
                     hint = format_annotation(hint)
@@ -128,27 +130,47 @@ class XCDocumenter(ExceptionDocumenter):
 
                 self.add_line('', source)
 
-            self.add_line('Each parameter defines an attribute of the same name.', source)
-            self.add_line('', source)
+            if has_params:
+                self.add_line('Each parameter defines an attribute of the same name.', source)
+                self.add_line('', source)
+
+            subclasses = self.object.__subclasses__()
 
             # Add the attributes
 
+            # For a base class, the only inherited property that's of interest
+            # is the status
+
+            if subclasses:
+                show_props = ('status',)
+            else:
+                show_props = ('typename', 'title', 'detail', 'status')
+
             self.add_line('Properties (read-only)', source)
 
-
-            for name in ('typename', 'title', 'detail', 'status'):
+            for name in show_props:
                 self.add_line(
-                    '  :py:attr:`%s` = %s' % (name,repr(getattr(self.object, name))),
+                    '  :py:attr:`%s` = %s' % (name,repr(getattr(self.object, name, '(not set)'))),
                     source
                 )
                 self.add_line('', source)
 
+
             self.add_line((
                 'For more information about the above properties'
-                ' please refer to the description of the base class :py:class:`~rjgtoys.blobs.xc.XC`.'
+                ' please refer to the documentation for :py:mod:`rjgtoys.xc`.'
                 ),
                 source
             )
+
+            if subclasses:
+                self.add_line('', source)
+                self.add_line('Subclasses:', source)
+                self.add_line('', source)
+
+                for sub in subclasses:
+                    self.add_line(' - :exc:`%s`' % (sub.__name__), source)
+                    self.add_line('', source)
 
         finally:
             self.indent = indent
