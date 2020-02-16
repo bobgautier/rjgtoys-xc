@@ -6,7 +6,7 @@ from rjgtoys.projects import setup, readfile
 setup(
     name = "rjgtoys-xc",
     version = "0.0.1",
-    author = "Bob Gautier",
+    author = "Robert J Gautier",
     author_email = "bob.gautier@gmail.com",
     url = "https://github.com/bobgautier/rjgtoys-xc",
     description = ("Structured exceptions for Python"),
