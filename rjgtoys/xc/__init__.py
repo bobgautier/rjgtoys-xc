@@ -25,3 +25,32 @@ class Error(XC):
     """
 
     pass
+
+
+class BadExceptionBug(Bug):
+    """Raised when some function or method raises an exception
+    that it has not declared itself capable of raising.
+
+    :param raised: The exception that was raised (and which is
+            not in the allowed set)
+    """
+
+    detail = "Disallowed exception raised: {raised)"
+
+
+class BadExceptionsInTestBug(Bug):
+
+    """Raised on an attempt to patch something to
+        raise an exception that it is not allowed to raise
+
+    Args:
+        name: Name of the object being tested
+        exceptions: The exceptions that may not be raised
+            by this object
+    """
+
+    oneline = "Test case for {name} raises bad exception(s): {exclist}"
+
+    def unpack(self):
+        self.exclist = ", ".join(map(repr, self.exceptions))
+
