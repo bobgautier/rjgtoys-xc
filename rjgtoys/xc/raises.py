@@ -198,7 +198,7 @@ class Raiser(object):
         self.to_raise = iter(exceptions)
 
     def __call__(self, *args, **kwargs):
-        raise self.eseq.next()
+        raise next(self.to_raise)
 
 
 def raises_exception(name, *exceptions):
