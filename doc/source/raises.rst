@@ -14,18 +14,14 @@ Python (currently) has no such mechanism, but XC offers
 a partial stand-in, in the form of the ``@raises``
 decorator.
 
-This decorator automates documentation of the exception raising
-behaviour of a callable.   It may be applied to any function,
-method or class.
-
-.. note::
-   The exception raising behaviour described by ``@raises`` is not yet
-   checked or enforced, either at compile (import) or runtime.
-
 .. decorator:: raises(exc1, [exc2, exc_list...])
 
 This specifies a list of exceptions, or exception classes, that may
 be raised by the callable to which the decorator is applied.
+
+.. note::
+   This decorator may be applied to any function or
+   method, but not (yet) to a class.
 
 Each of the parameters ``exc1``, ``exc2``, ``exc_list`` may be:
 
@@ -41,8 +37,26 @@ A list of either of the above
    member of the list is interpreted according to these three
    rules.
 
-Example
--------
+The decorator performs two functions:
+
+1. It adds documentation of the exception-raising behaviour
+   of the callable to which it is applied;
+2. It creates a run-time check that the declared exception-raising
+   behaviour is followed.  If an exception is raised that is not
+   included in the permitted set, that exception is replaced by a :exc:`BadExceptionBug` exception
+   that wraps the original (bad) exception.
+
+Example: Enforcement
+
+The following code defines a function that is declared capable of
+raising an exception, but which can in fact raise another:
+
+.. literalinclude:: ../../examples/enforcement.py
+
+
+
+Example: Documentation
+----------------------
 
 Here are some exception declarations::
 

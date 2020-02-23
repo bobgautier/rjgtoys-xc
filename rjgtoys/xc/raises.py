@@ -38,10 +38,12 @@ class raises:
         def _f(*args, **kwargs):
             try:
                 return f(*args, **kwargs)
-            except self._raises:
+            except self._raises:    # Allowed exceptions are just propagated
+                raise
+            except xc.Bug: # Any bugs are just propagated
                 raise
             except Exception as bug:
-                raise xc.BadExceptionBug(raised=bug)
+                raise xc.BadExceptionBug(raised=bug) from bug
 
         # Save the allowed exception list
 

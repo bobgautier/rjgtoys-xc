@@ -26,6 +26,19 @@ class Error(XC):
 
     pass
 
+class _ExceptionField:
+    """Allows a Pydantic model to have fields that hold an exception value."""
+
+    @classmethod
+    def __get_validators__(cls):
+        yield cls._validate
+
+    @classmethod
+    def _validate(cls, v):
+        assert isinstance(v, Exception)
+        return v
+
+
 
 class BadExceptionBug(Bug):
     """Raised when some function or method raises an exception
@@ -35,7 +48,9 @@ class BadExceptionBug(Bug):
             not in the allowed set)
     """
 
-    detail = "Disallowed exception raised: {raised)"
+    raised: _ExceptionField = Title("The disallowed exception")
+
+    detail = "Disallowed exception raised: {raised}"
 
 
 class BadExceptionsInTestBug(Bug):

@@ -209,7 +209,10 @@ class XC(_XCBase, metaclass=_XCType):
     status: int = 400
 
     def __str__(self):
-        return self.detail.format(**self._content.dict())
+        try:
+            return self.detail.format(**self._content.dict())
+        except Exception as e:
+            return "%s.__str__() -> %s" % (self.__class__.__name__, e)
 
     def to_dict(self):
         """Produce a JSON-encodable dict representing this exception.
