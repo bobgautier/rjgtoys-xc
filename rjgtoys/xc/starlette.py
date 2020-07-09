@@ -17,14 +17,11 @@ from starlette.types import ASGIApp
 from rjgtoys.xc import Error, Title
 
 
-
 async def handle_xc(request: Request, exc: Error):
 
-#    print("Handing exception %s" % (exc))
+    #    print("Handing exception %s" % (exc))
     return JSONResponse(
         status_code=exc.status,
         content=exc.to_dict(),
-        media_type='application/problem+json'
+        media_type='application/problem+json',
     )
-
-

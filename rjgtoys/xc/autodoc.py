@@ -1,4 +1,3 @@
-
 from typing import Any, get_type_hints
 
 
@@ -21,6 +20,7 @@ class XCDocumenter(ExceptionDocumenter):
     """
     Specialized ExceptionDocumenter subclass for XC exceptions.
     """
+
     objtype = 'exception'
     directivetype = 'exception'
     member_order = 10
@@ -29,23 +29,32 @@ class XCDocumenter(ExceptionDocumenter):
     priority = 15
 
     @classmethod
-    def can_document_member(cls, member: Any, membername: str, isattr: bool, parent: Any
-                            ) -> bool:
+    def can_document_member(
+        cls, member: Any, membername: str, isattr: bool, parent: Any
+    ) -> bool:
         return isinstance(member, type) and issubclass(member, XC)
-
 
     def get_base_description(self):
 
         if not hasattr(self.object, '__bases__') or not len(self.object.__bases__):
-            print("Could not identify bases for %s.%s" % (self.object.__module__, self.object.__name__))
+            print(
+                "Could not identify bases for %s.%s"
+                % (self.object.__module__, self.object.__name__)
+            )
             return ""
 
-        bases = [':class:`%s.%s`' % (b.__module__, b.__name__)
-                    for b in self.object.__bases__]
+        bases = [
+            ':class:`%s.%s`' % (b.__module__, b.__name__) for b in self.object.__bases__
+        ]
         return ', '.join(bases)
 
-    def generate(self, more_content: Any = None, real_modname: str = None,
-                 check_module: bool = False, all_members: bool = False) -> None:
+    def generate(
+        self,
+        more_content: Any = None,
+        real_modname: str = None,
+        check_module: bool = False,
+        all_members: bool = False,
+    ) -> None:
         """Generate reST for the object given by *self.name*, and possibly for
         its members.
 
@@ -57,10 +66,14 @@ class XCDocumenter(ExceptionDocumenter):
         if not self.parse_name():
             # need a module to import
             logger.warning(
-                __('don\'t know which module to import for autodocumenting '
-                   '%r (try placing a "module" or "currentmodule" directive '
-                   'in the document, or giving an explicit module name)') %
-                self.name, type='autodoc')
+                __(
+                    'don\'t know which module to import for autodocumenting '
+                    '%r (try placing a "module" or "currentmodule" directive '
+                    'in the document, or giving an explicit module name)'
+                )
+                % self.name,
+                type='autodoc',
+            )
             return
 
         # now, import the module and get object to document
@@ -77,7 +90,7 @@ class XCDocumenter(ExceptionDocumenter):
                 more_content=more_content,
                 real_modname=real_modname,
                 check_module=check_module,
-                all_members=all_members
+                all_members=all_members,
             )
             return
 
@@ -119,7 +132,7 @@ class XCDocumenter(ExceptionDocumenter):
             has_params = False
             for (pname, ptype) in schema['properties'].items():
                 has_params = True
-                hint = hints.get(pname,'')
+                hint = hints.get(pname, '')
                 if hint:
                     hint = format_annotation(hint)
                 else:
@@ -131,7 +144,9 @@ class XCDocumenter(ExceptionDocumenter):
                 self.add_line('', source)
 
             if has_params:
-                self.add_line('Each parameter defines an attribute of the same name.', source)
+                self.add_line(
+                    'Each parameter defines an attribute of the same name.', source
+                )
                 self.add_line('', source)
 
             subclasses = self.object.__subclasses__()
@@ -150,17 +165,18 @@ class XCDocumenter(ExceptionDocumenter):
 
             for name in show_props:
                 self.add_line(
-                    '  :py:attr:`%s` = %s' % (name,repr(getattr(self.object, name, '(not set)'))),
-                    source
+                    '  :py:attr:`%s` = %s'
+                    % (name, repr(getattr(self.object, name, '(not set)'))),
+                    source,
                 )
                 self.add_line('', source)
 
-
-            self.add_line((
-                'For more information about the above properties'
-                ' please refer to the documentation for :py:mod:`rjgtoys.xc`.'
+            self.add_line(
+                (
+                    'For more information about the above properties'
+                    ' please refer to the documentation for :py:mod:`rjgtoys.xc`.'
                 ),
-                source
+                source,
             )
 
             if subclasses:
@@ -193,8 +209,8 @@ class StdExceptionDocumenter(ExceptionDocumenter):
 
     """
 
-    objtype="xc_as_exception"
-    directivetype="exception"
+    objtype = "xc_as_exception"
+    directivetype = "exception"
 
 
 def setup(app):

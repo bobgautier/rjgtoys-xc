@@ -7,6 +7,7 @@ from ._xc import XC, Title
 # The following are put here simply so that their fully qualified
 # names do not include _xc
 
+
 class Bug(XC):
     """
     This is the base class for exceptions that should never occur at runtime.
@@ -26,6 +27,7 @@ class Error(XC):
 
     pass
 
+
 class _ExceptionField:
     """Allows a Pydantic model to have fields that hold an exception value."""
 
@@ -37,7 +39,6 @@ class _ExceptionField:
     def _validate(cls, v):
         assert isinstance(v, Exception)
         return v
-
 
 
 class BadExceptionBug(Bug):
@@ -68,4 +69,3 @@ class BadExceptionsInTestBug(Bug):
 
     def unpack(self):
         self.exclist = ", ".join(map(repr, self.exceptions))
-

@@ -50,6 +50,7 @@ can be kept separate.
 
 """
 
+
 class _XCBase(Exception):
     """A hidden base class for exceptions."""
 
@@ -91,7 +92,7 @@ class _XCType(type):
         attrs.setdefault('typename', qualname)
         # Does this 'inherit' correctly?
         if 'title' not in attrs:
-            title = attrs.get('__doc__','\n').splitlines()[0]
+            title = attrs.get('__doc__', '\n').splitlines()[0]
             attrs['title'] = title
 
         exc_attrs = {}
@@ -123,10 +124,10 @@ class _XCType(type):
 
         # UGLY: fix up the annotations of the model and the exception
 
-        anns = attrs.get('__annotations__',{})
+        anns = attrs.get('__annotations__', {})
 
         # Capture annotations of any attributes that were put into the exception
-        exc_ann = { k: anns[k] for k in exc_attrs if k in anns }
+        exc_ann = {k: anns[k] for k in exc_attrs if k in anns}
         # and anyway copy those for the forced attributes
         exc_ann.update({k: anns[k] for k in exc_attr_forced if k in anns})
 
@@ -134,13 +135,13 @@ class _XCType(type):
 
         # Move all the rest to the model
 
-        model_ann = { k: v for (k,v) in anns.items() if k not in exc_ann }
+        model_ann = {k: v for (k, v) in anns.items() if k not in exc_ann}
 
         model_attrs['__annotations__'] = model_ann
 
-#        print("Build %s exception %s from %s" % (cls.__name__, name, attrs))
-#        print("  Exception attrs %s" % (exc_attrs,))
-#        print("  Model attrs %s" % (model_attrs,))
+        #        print("Build %s exception %s from %s" % (cls.__name__, name, attrs))
+        #        print("  Exception attrs %s" % (exc_attrs,))
+        #        print("  Model attrs %s" % (model_attrs,))
 
         exc_doc = exc_attrs.get('__doc__', exc_attrs['title'])
 
@@ -226,11 +227,8 @@ class XC(_XCBase, metaclass=_XCType):
             title=self.title,
             status=self.status,
             detail=str(self),
-            instance="%s?%s" % (
-                self.typename,
-                urllib.parse.urlencode(content)
-            ),
-            content=content
+            instance="%s?%s" % (self.typename, urllib.parse.urlencode(content)),
+            content=content,
         )
         return data
 
@@ -270,5 +268,3 @@ def all_subclasses(cls):
     return set(cls.__subclasses__()).union(
         [s for c in cls.__subclasses__() for s in all_subclasses(c)]
     )
-
-

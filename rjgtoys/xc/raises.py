@@ -10,6 +10,7 @@ import jinja2
 
 from rjgtoys import xc
 
+
 @dataclass
 class ExceptionInfo:
     module: str
@@ -20,7 +21,6 @@ class ExceptionInfo:
 
 
 class raises:
-
     def __init__(self, *excs):
 
         self._raises = tuple(self.flatten(excs))
@@ -38,9 +38,9 @@ class raises:
         def _f(*args, **kwargs):
             try:
                 return f(*args, **kwargs)
-            except self._raises:    # Allowed exceptions are just propagated
+            except self._raises:  # Allowed exceptions are just propagated
                 raise
-            except xc.Bug: # Any bugs are just propagated
+            except xc.Bug:  # Any bugs are just propagated
                 raise
             except Exception as bug:
                 raise xc.BadExceptionBug(raised=bug) from bug
@@ -64,9 +64,9 @@ class raises:
             lastline = ''
 
         indent = len(lastline) - len(lastline.lstrip())
-        indent = lastline[:indent+1]
+        indent = lastline[: indent + 1]
 
-        body = [ indent+line for line in body.splitlines() ]
+        body = [indent + line for line in body.splitlines()]
 
         _f.__doc__ = doc + "\n".join(body)
 
@@ -95,15 +95,11 @@ class raises:
     def render_template(self, template, **args):
         """Find and render a template."""
 
-        env = jinja2.Environment(
-            loader=jinja2.FunctionLoader(self.get_template)
-        )
+        env = jinja2.Environment(loader=jinja2.FunctionLoader(self.get_template))
 
         tpl = env.get_template(template)
 
-        return tpl.render(
-                **args
-            )
+        return tpl.render(**args)
 
     def render(self):
 
@@ -133,7 +129,7 @@ class raises:
                 name=e.__name__,
                 qualname=qualname,
                 title=title,
-                isleaf=isleaf
+                isleaf=isleaf,
             )
 
     @classmethod
@@ -178,7 +174,6 @@ def may_raise(f):
         return set(getattr(f, '_raises__xc_raises'))
     except:
         return set((Exception,))
-
 
 
 class Raiser(object):
@@ -269,9 +264,10 @@ def raises_exception(name, *exceptions):
             # in the exceptions list are allowed for the target
             # callable.
 
-            assert t, "Encountered a bad exception %s" \
-                        "despite pre-validation of the list" \
-                            % (repr(e))
+            assert t, (
+                "Encountered a bad exception %s"
+                "despite pre-validation of the list" % (repr(e))
+            )
 
             # If the exception matches more than one item in the allowed
             # set, then the allowed set has a redundancy.

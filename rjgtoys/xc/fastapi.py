@@ -26,6 +26,7 @@ from rjgtoys.xc import Error
 
 # Keep this for reference
 
+
 class ErrorResponse(BaseModel):
     """Document returned with an error."""
 
@@ -37,13 +38,10 @@ class ErrorResponse(BaseModel):
     content: dict = Title("Content of the error - depends on type")
 
 
-ErrorResponses = {
-    400: { 'model': ErrorResponse }
-}
+ErrorResponses = {400: {'model': ErrorResponse}}
 
 
 class APIRoute(routing.APIRoute):
-
     def __init__(
         self,
         path: str,
@@ -76,7 +74,7 @@ class APIRoute(routing.APIRoute):
             rype = response_model
 
         responses = responses or {}
-        combined_responses = { **responses, **ErrorResponses }
+        combined_responses = {**responses, **ErrorResponses}
 
         super().__init__(
             path=path,
@@ -98,7 +96,7 @@ class APIRoute(routing.APIRoute):
             include_in_schema=include_in_schema,
             response_class=response_class,
             dependency_overrides_provider=dependency_overrides_provider,
-            callbacks=callbacks
+            callbacks=callbacks,
         )
 
 
@@ -118,5 +116,5 @@ class APIRouter(routing.APIRouter):
             default=default,
             dependency_overrides_provider=dependency_overrides_provider,
             route_class=route_class,
-            default_response_class=default_response_class
+            default_response_class=default_response_class,
         )

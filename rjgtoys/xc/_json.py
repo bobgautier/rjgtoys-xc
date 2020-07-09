@@ -14,9 +14,11 @@ def json_loads(s, object_hook=None):
 
     return json.loads(s, object_hook=object_hook or Thing)
 
+
 def json_load(stream, object_hook=None):
     """Load JSON from a stream and return a :class:`Thing`."""
     return json.load(io.TextIOWrapper(stream), object_hook=object_hook or Thing)
+
 
 def json_dumps(obj):
     """Produce consistent repeatable JSON from an object."""

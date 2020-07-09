@@ -36,7 +36,6 @@ class Thing(dict):
 
     __getattr__ = __getitem__
 
-
     def merge(self, other):
         """A recursive 'update'.
 
@@ -50,7 +49,7 @@ class Thing(dict):
     def dict_merge(cls, dest, other):
         """Merge one dict-like object into another."""
 
-#        print("merge %s into %s" % (other, dest))
+        #        print("merge %s into %s" % (other, dest))
 
         for (k, v) in other.items():
             try:
@@ -107,6 +106,5 @@ class ThingChain(collections.ChainMap):
                 pass
 
         return self.__missing__(name)
-
 
     __getattr__ = __getitem__
