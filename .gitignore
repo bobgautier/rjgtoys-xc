@@ -4,6 +4,7 @@ rjgtoys.xc.egg-info
 .coverage
 htmlcov
 junit.xml
+pylint.out
 .eggs
 build
 .mypy_cache
