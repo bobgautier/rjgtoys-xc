@@ -212,7 +212,7 @@ is this method::
 
     def get(self, op, **params):
 
-        url = "%s%s" % (self.service, op)
+        url = f"{self.service}{op}"
         r = requests.get(url, params=params)
 
         if r.status_code == 400:

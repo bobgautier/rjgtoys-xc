@@ -128,6 +128,6 @@ Both the class- and instance-attributes of an exception are available to the han
         copy_file_to_dest(src, dst):
     except InsufficientSpace as e:
         print(e)
-        print("Please free at least %d bytes, or try a different filesystem" % (e.need-e.avail))
+        print("Please free at least {need} bytes, or try a different filesystem".format(need=e.need-e.avail))
 
 

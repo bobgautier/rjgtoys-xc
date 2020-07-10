@@ -20,5 +20,5 @@ try:
     copy_file_to_dest('a', 'b')
 except InsufficientSpace as e:
     print(e)
-    print("Please free at least %d bytes, or try a different filesystem" % (e.need-e.avail))
+    print("Please free at least {need} bytes, or try a different filesystem".format(need=e.need-e.avail))
 

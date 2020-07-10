@@ -31,7 +31,7 @@ You may have seen (or even written) code that raises exceptions like this::
             port = int(port)
             return (host, port)
         except ValueError:
-            raise Exception("Invalid host port specification: %s" % (spec))
+            raise Exception(f"Invalid host port specification: {spec}")
 
 When a 'general purpose' exception class is used, handling the exception becomes
 difficult.
@@ -70,7 +70,7 @@ is to examine the string representation of the exception::
 
         s = t.rsplit(' ')[-1]
 
-        print("Invalid spec '%s'.  Please specify in the form host:port" % (s))
+        print(f"Invalid spec '{s}'.  Please specify in the form host:port")
 
 
 What's a "structured" exception?
@@ -97,7 +97,7 @@ you don't have to write any constructors or any other methods for your new excep
 
     from rjgtoys.xc import Error, Title
 
-    class InvalidHostPort(XC.Error):
+    class InvalidHostPort(Error):
         """Raised when an host:port specification is wrong."""
 
         spec: str = Title("The invalid host:port string")
@@ -122,7 +122,7 @@ The handler is now very specific::
     try:
         (h, p) = split_host_port(data)
     except InvalidHostPort as e:
-        print("Invalid spec '%s'.  Please specify in the form host:port" % (e.spec))
+        print(f"Invalid spec '{e.spec}'.  Please specify in the form host:port")
 
 
 In the handler, you now have a specific exception class to catch, and furthermore, it delivers the detail that
