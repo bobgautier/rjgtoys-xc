@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
-from rjgtoys.projects import setup, readfile
-
+try:
+    from rjgtoys.projects import setup
+except ImportError:
+    from setuptools import setup
 
 setup(
     name = "rjgtoys-xc",
-    version = "0.0.1",
+    version = "0.0.2",
     author = "Robert J Gautier",
     author_email = "bob.gautier@gmail.com",
     url = "https://github.com/bobgautier/rjgtoys-xc",
