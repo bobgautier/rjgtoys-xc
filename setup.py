@@ -16,7 +16,8 @@ setup(
         'pydantic',
     ],
     extras_require = {
-        'autodoc': ['sphinx_autodoc_typehints']
+        'autodoc': ['sphinx_autodoc_typehints'],
+        'fastapi': ['fastapi>=0.61.1']
     },
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -22,3 +22,6 @@ except InsufficientSpace as e:
     print(e)
     print("Please free at least {need} bytes, or try a different filesystem".format(need=e.need-e.avail))
 
+    import json
+
+    print(json.dumps(e.to_dict(), indent=4, sort_keys=True))

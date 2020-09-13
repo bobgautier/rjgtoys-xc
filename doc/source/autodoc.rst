@@ -62,3 +62,5 @@ Compare the plain ``autoexception`` output:
    the default treatment of an XC exception.
 
 .. autoxc_as_exception:: examples.insuffspace.InsufficientSpace
+
+

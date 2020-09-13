@@ -9,6 +9,6 @@ This is a FastAPI api server that reports errors using XC exceptions.
 To run it:
 
 ```
-  python -m uvicorn server:app
+  python -m uvicorn apiserver:app
 ```
 
